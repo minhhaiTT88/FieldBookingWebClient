@@ -1,8 +1,8 @@
-import { DatePicker, Form, Input, InputNumber, Modal, Select } from "antd";
+import { DatePicker, Form, Input, InputNumber } from "antd";
 import { useGlobalConst } from "../../../utils/constData";
 import { useSelector } from "react-redux";
 
-const FormConfirmBooking = ({ formInstance, action, data }) => {
+const FormItems = ({ formInstance, action, data }) => {
   const globalConst = useGlobalConst();
   const allCode = useSelector((state) => state.allcodeReducer.ALLCODE);
 
@@ -11,17 +11,11 @@ const FormConfirmBooking = ({ formInstance, action, data }) => {
       <Form.Item name={"FieldBookingId"} hidden />
       <Form.Item name={"CustomerId"} hidden />
       <Form.Item name={"FieldId"} hidden />
+      <Form.Item name={"TimeSlotId"} hidden />
 
       <Form.Item name={"TimeFrom"} hidden />
       <Form.Item name={"TimeTo"} hidden />
 
-      {/* <div className="flex flex-nowrap">
-        <div className="flex-1">
-          <Form.Item label={`Mã đơn`} name={"Code"}>
-            <Input disabled />
-          </Form.Item>
-        </div>
-      </div> */}
       <div className="flex flex-nowrap gap-4">
         <div className="flex-1">
           <Form.Item
@@ -49,27 +43,36 @@ const FormConfirmBooking = ({ formInstance, action, data }) => {
       <div className="flex flex-nowrap gap-4">
         <div className="flex-1">
           <Form.Item
-            label={`Ngày đặt sân`}
-            name={"BookingDate"}
-            {...globalConst.ANT.FORM.ITEM.PARSER.DATE_DATABASE}
+            label="Ngày đặt sân"
+            name="BookingDate"
             rules={[globalConst.ANT.FORM.RULES.yeuCauNhap]}
+            {...globalConst.ANT.FORM.ITEM.PARSER.DATE_DATABASE}
           >
             <DatePicker
-              format={globalConst.ANT.LOCALE.dateFormat}
               placeholder="dd/MM/yyyy"
+              format={globalConst.ANT.LOCALE.dateFormat}
+              disabled
             />
           </Form.Item>
         </div>
         <div className="flex-1">
-          <Form.Item label={`Sân`} name={"FieldName"}>
-            <Input />
+          <Form.Item
+            label={`Sân`}
+            name={"FieldName"}
+            rules={[globalConst.ANT.FORM.RULES.yeuCauNhap]}
+          >
+            <Input disabled />
           </Form.Item>
         </div>
       </div>
       <div className="flex flex-nowrap gap-4">
         <div className="flex-1">
-          <Form.Item label={`Khung giờ`} name={"TimeSlotText"}>
-            <Input />
+          <Form.Item
+            label={`Khung giờ`}
+            name={"TimeSlotText"}
+            rules={[globalConst.ANT.FORM.RULES.yeuCauNhap]}
+          >
+            <Input disabled />
           </Form.Item>
         </div>
         <div className="flex-1">
@@ -79,8 +82,9 @@ const FormConfirmBooking = ({ formInstance, action, data }) => {
             rules={[globalConst.ANT.FORM.RULES.yeuCauNhap]}
           >
             <InputNumber
+              disabled
               formatter={(value) =>
-                `${value} đ`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                `${value}đ`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
               }
               parser={(value) =>
                 value?.replace(/\$\s?|(,*)/g, "")?.replace("đ", "")
@@ -109,32 +113,29 @@ const FormConfirmBooking = ({ formInstance, action, data }) => {
         </div>
         <div className="flex-1"></div>
       </div>
-
-      {action !== "create" && (
-        <>
-          <Form.Item label={`Trạng thái`} name={"Status"} rules={[]}>
-            <Select
-              allowClear
-              mode="single"
-              showSearch
-              optionFilterProp="children"
-              disabled
-            >
-              {allCode
-                ?.filter(
-                  (e) => e.Cdname === "FIELD_BOOKING" && e.Cdtype === "STATUS"
-                )
-                .map((item, key) => (
-                  <Option key={key} value={item.Cdval}>
-                    {item.Content}
-                  </Option>
-                ))}
-            </Select>
-          </Form.Item>
-        </>
-      )}
+      <div className="w-full mt-2">
+        <div>
+          Chuyển khoảng số tiền cọc của bạn đến số tài khoản bên dưới với nội
+          dung ví dụ : "san 1 ngay 25062024 gio 1345 1445 chuyen coc", Hãy chụp
+          lại thông báo giao dịch thành công để dễ dàng xử lý sai sót sau về sau
+        </div>
+        <div className="w-fit m-auto">
+          {/*  Company logo  */}
+          <img
+            className="m-auto"
+            src="https://quickchart.io/qr?text=BarcodesInc&size=200"
+            alt="company-logo"
+            height={200}
+            width={200}
+          />
+          <div className="font-bold">
+            <div>Tên tài khoản: SAN BONG THUY LOI</div>
+            <div>Ngân hàng: MB</div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default FormConfirmBooking;
+export default FormItems;

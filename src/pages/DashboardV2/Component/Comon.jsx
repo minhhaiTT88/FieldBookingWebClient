@@ -3,66 +3,77 @@ import { formatDate } from "../../../utils/convertData";
 import { Button, Tooltip } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faFile, faFolder, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
+import moment from "moment";
 
-export const StatusPost = {
-  PENDING: 0,
-  DONE: 1,
-  HIDE: 2,
+export const FIELD_BOOKING_STATUS = {
+  pending: "P",
+  approved: "A",
+  done: "D",
+  leave_deposit: "L",
+  reject: "X",
 };
+
+export const FIELD_STATUS = {
+  active: "A",
+  inactive: "I",
+};
+
+export const DateLabel = ({ date, day, isDateNow }) => {
+  return (
+    <span className={`${isDateNow && "underline"}`}>
+      <h2 className="text-xl font-bold">{day}</h2>
+      <h3 className="text-base">{date}</h3>
+    </span>
+  );
+};
+
+export function getNextSixDays() {
+  const daysOfWeek = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
+  let daysList = [];
+  for (let i = 0; i <= 6; i++) {
+    let date = moment().add(i, "days");
+    let _isDateNow = date.format("DD/MM") === moment().format("DD/MM");
+
+    let dayObj = {
+      key: date.format("YYYY-MM-DD"),
+      label: (
+        <DateLabel
+          date={date.format("DD/MM")}
+          day={daysOfWeek[date.day()]}
+          isDateNow={_isDateNow}
+        />
+      ),
+      isDateNow: _isDateNow,
+    };
+    daysList.push(dayObj);
+  }
+  return daysList;
+}
 
 export const columPostList = ({ DeletePost }) => {
   const navigate = useNavigate();
   return [
     {
-      field: "Post_Name",
-      headerName: "Tên khách hàng",
-      // cellRenderer: (e) => {
-      //   return (
-      //     <Link
-      //       to={`/quan-ly-bai-viet/quan-ly-file?id=${e.data.Post_Id}&name=${encodeURIComponent(
-      //         e.data.Post_Name
-      //       )}`}
-      //     >
-      //       {e.value}
-      //     </Link>
-      //   );
-      // },
-      // width: 300,
-    },
-    {
-      field: "StatusText",
-      headerName: "Trạng thái",
+      field: "Name",
+      headerName: "Tên sản phẩm",
       cellRenderer: (e) => {
-        if (e.data.Status == StatusPost.PENDING) {
-          return (
-            <div>
-              <span className="rounded-pill text-light-yellow">{e.data.StatusText}</span>
-            </div>
-          );
-        } else if (e.data.Status == StatusPost.DONE) {
-          return (
-            <div>
-              <span className="rounded-pill text-light-green">{e.data.StatusText}</span>
-            </div>
-          );
-        } else if (e.data.Status == StatusPost.HIDE) {
-          return (
-            <div>
-              <span className="rounded-pill text-light-blue">{e.data.StatusText}</span>
-            </div>
-          );
-        } else {
-          return <p>{e.data.StatusText}</p>;
-        }
+        return (
+          <Link
+            to={`/quan-ly-bai-viet/quan-ly-file?id=${e.data.Post_Id}&name=${encodeURIComponent(
+              e.data.Post_Name
+            )}`}
+          >
+            {e.value}
+          </Link>
+        );
       },
-      // width: 180,
-      alignedGrids: "left",
+      width: 300,
     },
     {
-      field: "Is_Private_Text",
-      headerName: "Khung giờ",
+      field: "Số lương",
+      headerName: "Loại bài viết",
 
-      // width: 250,
+      width: 250,
     },
     {
       field: "Created_Date",

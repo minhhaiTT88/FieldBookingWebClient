@@ -1,6 +1,7 @@
 import moment from "moment";
 import { formatNumber } from "./convertData";
 import IMask from "imask";
+import dayjs from "dayjs";
 
 export const removeAccents = (str) => {
   return str
@@ -421,18 +422,11 @@ export const useGlobalConst = () => {
           PARSER: {
             DATE_DATABASE: {
               getValueProps: (i) => {
-                let value =
-                  i &&
-                  i != 0 &&
-                  (typeof i !== "string" ||
-                    (!i.includes("0001-01-01T00:00:00") && i != "0"))
-                    ? moment(i, "YYYY-MM-DD")
-                    : null;
-                return { value };
+                return {
+                  value: i && dayjs(i),
+                };
               },
-              normalize: (val) => {
-                return val?.format("YYYY-MM-DD") ?? null;
-              },
+              normalize: (val) => val && `${dayjs(val).format("YYYY-MM-DD")}`,
               onKeyDown: (event) => {
                 const input = event.target;
                 input.value = DATE_MASKED.resolve(input.value);
@@ -513,3 +507,4 @@ export const DATE_MASKED = IMask.createMask({
   parse: (date) => moment(date, DATE_FORMAT),
   pattern: DATE_FORMAT,
 });
+

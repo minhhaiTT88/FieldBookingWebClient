@@ -1,18 +1,34 @@
 import { useAxios } from "../connection/APIConnection";
 
-export const usePublicApi = (controller) => {
+export const usePublicApi = () => {
   const apiConnection = useAxios();
 
   return {
-    GetBaseImage: (image_id) => {
+    GetFieldsActive: () => {
       return apiConnection.httpRequest(
         "GET",
-        `api/public/image/get-base-image`,
+        `api/PublicApi/GetFieldsActive`,
         null,
-        { image_id: image_id },
-        false,
-        "image/*",
-        { responseType: "blob" }
+        null,
+        true
+      );
+    },
+    ConfirmBooking: (prop) => {
+      return apiConnection.httpRequest(
+        "POST",
+        "api/PublicApi/ConfirmBooking",
+        prop,
+        null,
+        true
+      );
+    },
+    GetTimeSlotByDate: (fieldId, bookingDate) => {
+      return apiConnection.httpRequest(
+        "GET",
+        `api/PublicApi/GetTimeSlotByDate`,
+        null,
+        { fieldId, bookingDate },
+        true
       );
     },
   };

@@ -6,5 +6,5 @@ export default ({ mode }) => defineConfig({
     define: {
         "process.env.NODE_ENV": `"${mode}"`,
     },
-    server: {port: 5176}
+    server: {port: 5178}
 });

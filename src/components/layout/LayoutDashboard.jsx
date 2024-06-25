@@ -170,9 +170,10 @@ const LayoutDashboard = (props) => {
                 width={600}
                 height={350}
                 style={{ border: 0 }}
-                allowfullscreen=""
+                
                 loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
+                // allowfullscreen=""
+                // referrerpolicy="no-referrer-when-downgrade"
               ></iframe>
             </div>
           </div>
